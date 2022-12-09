@@ -15,7 +15,7 @@ const CHROME_COOKIE_PATH = path.join(
   'Google/Chrome/Default/Cookies'
 )
 
-console.log(CHROME_COOKIE_PATH)
+// console.log(CHROME_COOKIE_PATH)
 // /Users/magicdawn/Library/Application Support/Google/Chrome/Default/Cookies
 const db = new sqlite3.Database(CHROME_COOKIE_PATH)
 
@@ -25,7 +25,7 @@ FROM cookies
 WHERE host_key like '%bilibili%'
 `
 
-function getPassword() {
+export function getPassword() {
   const { stdout: password } = execa.commandSync(
     `security find-generic-password -w -a Chrome -s 'Chrome Safe Storage'`,
     { shell: true }
@@ -33,12 +33,12 @@ function getPassword() {
   return password
 }
 
-function getCipherKey(password?: string) {
+export function getCipherKey(password?: string) {
   password ||= getPassword()
   return crypto.pbkdf2Sync(password, 'saltysalt', 1003, 16, 'sha1')
 }
 
-function decrypt(cipherKey: Buffer, encryptedValue: Buffer) {
+export function decrypt(cipherKey: Buffer, encryptedValue: Buffer) {
   // version = encrypted_value[:3]
   // ciphertext = encrypted_value[3:]
   // if version == b'v10':
