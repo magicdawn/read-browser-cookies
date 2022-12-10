@@ -14,7 +14,7 @@ export type ICookieRow = {
   encryptedValue: Buffer
   path: string
   expiresUtc: number
-  is_secure: number
+  isSecure: number
 }
 
 export async function query(dbpath: string, site?: string) {

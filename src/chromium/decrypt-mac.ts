@@ -43,7 +43,7 @@ export function decrypt(cipherKey: Buffer, encryptedValue: Buffer) {
   if (version.toString('ascii') === 'v10') {
     return decryptAesCbc(cipherKey, encryptedPart)
   } else {
-    return encryptedValue
+    return encryptedValue.toString()
   }
 }
 
