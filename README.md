@@ -20,10 +20,8 @@ $ pnpm add read-browser-cookies
 - [ ] macOS + safari
 - [ ] macOS + firefox
 - [ ] windows + Chromium Based browsers
-- [ ] windows + safari
 - [ ] windows + firefox
 - [ ] Linux + Chromium Based browsers
-- [ ] Linux + safari
 - [ ] Linux + firefox
 
 current only macOS + Chromium based browsers are supported.
