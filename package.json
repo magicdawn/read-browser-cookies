@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "Node.js version  of `--cookies-from-browser` from yt-dlp",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "test": "mocha",
     "prepare": "husky install",
