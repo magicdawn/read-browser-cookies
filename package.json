@@ -1,6 +1,6 @@
 {
   "name": "read-browser-cookies",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js version  of `--cookies-from-browser` from yt-dlp",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
