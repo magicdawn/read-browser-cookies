@@ -1,6 +1,6 @@
 # read-browser-cookies
 
-> Node.js version  of `--cookies-from-browser` from yt-dlp
+> Node.js version of `--cookies-from-browser` from yt-dlp
 
 [![Build Status](https://img.shields.io/github/workflow/status/magicdawn/read-browser-cookies/ci/main.svg?style=flat-square)](https://github.com/magicdawn/read-browser-cookies/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/magicdawn/read-browser-cookies.svg?style=flat-square)](https://codecov.io/gh/magicdawn/read-browser-cookies)
@@ -14,10 +14,44 @@
 $ pnpm add read-browser-cookies
 ```
 
+## Status
+
+- [x] macOS + Chromium Based browsers
+- [ ] macOS + safari
+- [ ] macOS + firefox
+- [ ] windows + Chromium Based browsers
+- [ ] windows + safari
+- [ ] windows + firefox
+- [ ] Linux + Chromium Based browsers
+- [ ] Linux + safari
+- [ ] Linux + firefox
+
+current only macOS + Chromium based browsers are supported.
+
+#### chromium based browser names
+
+- chrome
+- chromium
+- edge
+- brave
+- opera
+- vivaldi
+
 ## API
 
 ```js
-const readBrowserCookies = require('read-browser-cookies');
+import { readBrowserCookies } from 'read-browser-cookies'
+
+// read all cookies
+readBrowserCookies('chrome').then((cookiesArray) => {
+  //
+})
+
+// read all cookies for specific site
+// using sqlite `like %site%`
+readBrowserCookies('chrome', { site: 'youtube.com' }).then((cookiesArray) => {
+  //
+})
 ```
 
 ## Changelog
