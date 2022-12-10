@@ -1,8 +1,5 @@
 import { chromiumBasedBrowsers, IChromiumBasedBrowser, readChromium } from './chromium'
-
-function notImplemented(): string {
-  throw new Error('not implemented')
-}
+import { notImplemented } from './helper'
 
 type ISupportedBrowsers = IChromiumBasedBrowser | 'firefox' | 'safari'
 
@@ -14,10 +11,6 @@ export function readBrowserCookies(
     browser = <IChromiumBasedBrowser>browser
     return readChromium(browser, options)
   }
-  return notImplemented()
-}
 
-// void (async () => {
-//   debugger
-//   console.log(await readBrowserCookies('chrome', { site: 'bilibili.com' }))
-// })().catch(console.error)
+  notImplemented()
+}

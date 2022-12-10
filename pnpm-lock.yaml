@@ -21,7 +21,7 @@ specifiers:
   promise.ify: ^0.4.0
   should: ^13.2.3
   sqlite3: ^5.1.2
-  typescript: ^4.9.3
+  typescript: ^4.9.4
 
 dependencies:
   execa: 5.1.1

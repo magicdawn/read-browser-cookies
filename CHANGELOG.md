@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## v0.0.1 2022-12-09
+## v0.0.1 2022-12-11
 
-- first release
+- first release, only mac + chromium based browsers are supported.
