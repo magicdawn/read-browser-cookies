@@ -1,40 +1,20 @@
-/**
- * https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/cookies.py
- */
-
 import crypto from 'crypto'
 import execa from 'execa'
-import { homedir } from 'os'
-import path from 'path'
-import sqlite3 from 'sqlite3'
+import keytar from 'keytar'
 
-const CHROME_COOKIE_PATH = path.join(
-  homedir(),
-  'Library',
-  'Application Support',
-  'Google/Chrome/Default/Cookies'
-)
-
-// console.log(CHROME_COOKIE_PATH)
-// /Users/magicdawn/Library/Application Support/Google/Chrome/Default/Cookies
-const db = new sqlite3.Database(CHROME_COOKIE_PATH)
-
-const sql = `
-SELECT host_key, name, value, encrypted_value, path, expires_utc, is_secure
-FROM cookies
-WHERE host_key like '%bilibili%'
-`
-
-export function getPassword() {
+export function getPassword(browserKeyringName: string) {
   const { stdout: password } = execa.commandSync(
-    `security find-generic-password -w -a Chrome -s 'Chrome Safe Storage'`,
+    `security find-generic-password -w -a '${browserKeyringName}' -s '${browserKeyringName} Safe Storage'`,
     { shell: true }
   )
   return password
 }
 
-export function getCipherKey(password?: string) {
-  password ||= getPassword()
+export function getPasswordByKeytar(browserKeyringName: string) {
+  return keytar.getPassword(`${browserKeyringName} Safe Storage`, browserKeyringName)
+}
+
+export function getCipherKey(password: string) {
   return crypto.pbkdf2Sync(password, 'saltysalt', 1003, 16, 'sha1')
 }
 
@@ -84,17 +64,3 @@ function decryptAesCbc(cipherKey: Buffer, encrypted: Buffer) {
 
   return result.toString()
 }
-
-db.all(sql, (err, rows) => {
-  if (err) {
-    return console.log(err)
-  }
-
-  const cipherKey = getCipherKey()
-
-  rows.forEach((row) => {
-    row.encrypted_value = decrypt(cipherKey, row.encrypted_value)
-  })
-
-  console.log(rows)
-})
