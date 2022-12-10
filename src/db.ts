@@ -33,5 +33,7 @@ export async function query(dbpath: string, site?: string) {
     })
   })
 
+  db.close()
+
   return rows
 }
