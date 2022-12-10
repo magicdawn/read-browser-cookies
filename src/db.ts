@@ -2,18 +2,18 @@ import { Database, OPEN_READONLY } from 'sqlite3'
 import { baseDebug } from './helper'
 
 const DEFAULT_SQL = `
-SELECT host_key, name, value, encrypted_value, path, expires_utc, is_secure
+SELECT host_key as hostKey, name, value, encrypted_value as encryptedValue, path, expires_utc as expiresUtc, is_secure as isSecure
 FROM cookies
 `
 const debug = baseDebug.extend('db')
 
 export type ICookieRow = {
-  host_key: string
+  hostKey: string
   name: string
   value: string
-  encrypted_value: Buffer
+  encryptedValue: Buffer
   path: string
-  expires_utc: number
+  expiresUtc: number
   is_secure: number
 }
 

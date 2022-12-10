@@ -2,13 +2,13 @@
  * https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/cookies.py
  */
 
-import os from 'os'
-import path from 'path'
-import { ArrayItems, baseDebug, defineCrossPlatform, execCrossPlatform } from '../helper'
 import fse from 'fs-extra'
 import globby from 'globby'
-import { ChromeCookieDecryptor } from './decrypt'
+import os from 'os'
+import path from 'path'
 import { query } from '../db'
+import { ArrayItems, baseDebug, execCrossPlatform } from '../helper'
+import { ChromeCookieDecryptor } from './decrypt'
 
 const debug = baseDebug.extend('chromium:index')
 
@@ -32,60 +32,60 @@ export type IChromiumBasedBrowser = ArrayItems<typeof chromiumBasedBrowsers>
 // or ('vivaldi', 'default', 'BASICTEXT')
 // or ('firefox', 'default', None, 'Meta')
 export async function readChromium(
-  browser_name: IChromiumBasedBrowser,
+  browserName: IChromiumBasedBrowser,
   { profile, keyring, site }: { profile?: string; keyring?: string; site?: string } = {}
 ) {
-  const config = getChromiumBasedBrowserSettings(browser_name)
+  const config = getChromiumBasedBrowserSettings(browserName)
 
-  let search_root: string
+  let searchRoot: string
   if (!profile) {
-    search_root = config.browser_dir
+    searchRoot = config.browserDir
   }
   // profile is path
-  else if (_is_path(profile)) {
-    search_root = profile
-    config.browser_dir = config.supports_profiles ? path.dirname(profile) : profile
+  else if (isPath(profile)) {
+    searchRoot = profile
+    config.browserDir = config.supportsProfiles ? path.dirname(profile) : profile
   }
   // profile is normal string
   else {
-    if (config.supports_profiles) {
-      search_root = path.join(config.browser_dir, profile)
+    if (config.supportsProfiles) {
+      searchRoot = path.join(config.browserDir, profile)
     } else {
       console.error('%s does not support profiles')
-      search_root = config.browser_dir
+      searchRoot = config.browserDir
     }
   }
 
   // check search_root
-  if (!fse.existsSync(search_root)) {
-    debug('search %s root not exists', search_root)
+  if (!fse.existsSync(searchRoot)) {
+    debug('search %s root not exists', searchRoot)
     return
   }
 
-  const cookie_database_path = findMostRecentlyUsedFile(search_root, 'Cookies')
-  if (!cookie_database_path) {
+  const cookieDatabasePath = findMostRecentlyUsedFile(searchRoot, 'Cookies')
+  if (!cookieDatabasePath) {
     debug('cookies database not found')
     return
   }
 
-  const allRows = await query(cookie_database_path, site)
+  const allRows = await query(cookieDatabasePath, site)
 
-  const decryptor = new ChromeCookieDecryptor(config.browser_dir, config.keyring_name, keyring)
+  const decryptor = new ChromeCookieDecryptor(config.browserDir, config.keyringName, keyring)
   await decryptor.init()
 
   const decryptedRows = allRows.map((row) => {
-    const newrow: Omit<typeof row, 'encrypted_value'> = {
+    const newrow: Omit<typeof row, 'encryptedValue'> = {
       ...row,
-      value: decryptor.decrypt(row.encrypted_value) || row.value,
+      value: decryptor.decrypt(row.encryptedValue) || row.value,
     }
     // @ts-ignore
-    delete newrow.encrypted_value
+    delete newrow.encryptedValue
     return newrow
   })
   return decryptedRows
 }
 
-function _is_path(value: string) {
+function isPath(value: string) {
   return value?.includes(path.sep)
 }
 
@@ -103,22 +103,22 @@ function findMostRecentlyUsedFile(root: string, filename: string) {
 /**
  * def _get_chromium_based_browser_settings(browser_name):
  */
-function getChromiumBasedBrowserSettings(browser_name: IChromiumBasedBrowser) {
+function getChromiumBasedBrowserSettings(browserName: IChromiumBasedBrowser) {
   // https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
-  let browser_dir = ''
+  let browserDir = ''
 
   execCrossPlatform({
     mac() {
       const appdata = path.posix.join(os.homedir(), 'Library/Application Support')
       const join = path.posix.join
-      browser_dir = {
+      browserDir = {
         brave: join(appdata, 'BraveSoftware/Brave-Browser'),
         chrome: join(appdata, 'Google/Chrome'),
         chromium: join(appdata, 'Chromium'),
         edge: join(appdata, 'Microsoft Edge'),
         opera: join(appdata, 'com.operasoftware.Opera'),
         vivaldi: join(appdata, 'Vivaldi'),
-      }[browser_name]
+      }[browserName]
     },
 
     win() {
@@ -128,45 +128,45 @@ function getChromiumBasedBrowserSettings(browser_name: IChromiumBasedBrowser) {
         throw new Error('expect LOCALAPPDATA & APPDATA environment variable')
       }
       const join = path.win32.join
-      browser_dir = {
+      browserDir = {
         brave: join(appdata_local, 'BraveSoftware/Brave-Browser/User Data'),
         chrome: join(appdata_local, 'Google/Chrome/User Data'),
         chromium: join(appdata_local, 'Chromium/User Data'),
         edge: join(appdata_local, 'Microsoft/Edge/User Data'),
         opera: join(appdata_roaming, 'Opera Software/Opera Stable'),
         vivaldi: join(appdata_local, 'Vivaldi/User Data'),
-      }[browser_name]
+      }[browserName]
     },
 
     linux() {
       const config = xdgConfigHome()
       const join = path.posix.join
-      browser_dir = {
+      browserDir = {
         brave: join(config, 'BraveSoftware/Brave-Browser'),
         chrome: join(config, 'google-chrome'),
         chromium: join(config, 'chromium'),
         edge: join(config, 'microsoft-edge'),
         opera: join(config, 'opera'),
         vivaldi: join(config, 'vivaldi'),
-      }[browser_name]
+      }[browserName]
     },
   })
 
-  const keyring_name = {
+  const keyringName = {
     brave: 'Brave',
     chrome: 'Chrome',
     chromium: 'Chromium',
     edge: process.platform == 'darwin' ? 'Microsoft Edge' : 'Chromium',
     opera: process.platform == 'darwin' ? 'Opera' : 'Chromium',
     vivaldi: process.platform == 'darwin' ? 'Vivaldi' : 'Chrome',
-  }[browser_name]
+  }[browserName]
 
-  const browsers_without_profiles: IChromiumBasedBrowser[] = ['opera']
+  const browsersWithoutProfiles: IChromiumBasedBrowser[] = ['opera']
 
   return {
-    browser_dir,
-    keyring_name,
-    supports_profiles: !browsers_without_profiles.includes(browser_name),
+    browserDir: browserDir,
+    keyringName: keyringName,
+    supportsProfiles: !browsersWithoutProfiles.includes(browserName),
   }
 }
 

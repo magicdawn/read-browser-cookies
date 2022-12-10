@@ -2,16 +2,20 @@ import crypto from 'crypto'
 import execa from 'execa'
 import keytar from 'keytar'
 
-export function getPassword(browserKeyringName: string) {
+export function getPasswordByExternalProcess(keyringName: string) {
   const { stdout: password } = execa.commandSync(
-    `security find-generic-password -w -a '${browserKeyringName}' -s '${browserKeyringName} Safe Storage'`,
+    `security find-generic-password -w -a '${keyringName}' -s '${keyringName} Safe Storage'`,
     { shell: true }
   )
   return password
 }
 
-export function getPasswordByKeytar(browserKeyringName: string) {
-  return keytar.getPassword(`${browserKeyringName} Safe Storage`, browserKeyringName)
+export async function getPasswordByKeytar(keyringName: string) {
+  return (await keytar.getPassword(`${keyringName} Safe Storage`, keyringName)) || ''
+}
+
+export function getPassword(keyringName: string) {
+  return getPasswordByKeytar(keyringName)
 }
 
 export function getCipherKey(password: string) {
