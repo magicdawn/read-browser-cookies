@@ -4,11 +4,13 @@
 
 import os from 'os'
 import path from 'path'
-import { ArrayItems, defineCrossPlatform, execCrossPlatform } from '../helper'
+import { ArrayItems, baseDebug, defineCrossPlatform, execCrossPlatform } from '../helper'
 import fse from 'fs-extra'
 import globby from 'globby'
 import { ChromeCookieDecryptor } from './decrypt'
 import { query } from '../db'
+
+const debug = baseDebug.extend('chromium:index')
 
 export const chromiumBasedBrowsers = [
   'brave' as const,
@@ -56,13 +58,13 @@ export async function readChromium(
 
   // check search_root
   if (!fse.existsSync(search_root)) {
-    console.warn('search %s root not exists', search_root)
+    debug('search %s root not exists', search_root)
     return
   }
 
   const cookie_database_path = findMostRecentlyUsedFile(search_root, 'Cookies')
   if (!cookie_database_path) {
-    console.warn('cookies database not found')
+    debug('cookies database not found')
     return
   }
 

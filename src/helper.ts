@@ -1,3 +1,7 @@
+import debugFactory from 'debug'
+
+export const baseDebug = debugFactory('read-browser-cookies')
+
 export type ArrayItems<T extends any[]> = T extends Array<infer Item> ? Item : never
 
 export function notImplemented() {

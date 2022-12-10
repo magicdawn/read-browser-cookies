@@ -1,9 +1,11 @@
 import { Database, OPEN_READONLY } from 'sqlite3'
+import { baseDebug } from './helper'
 
 const DEFAULT_SQL = `
 SELECT host_key, name, value, encrypted_value, path, expires_utc, is_secure
 FROM cookies
 `
+const debug = baseDebug.extend('db')
 
 export type ICookieRow = {
   host_key: string
@@ -22,6 +24,7 @@ export async function query(dbpath: string, site?: string) {
   if (site) {
     sql += `WHERE host_key like '%${site}%'`
   }
+  debug('exec sql: %s', sql)
 
   const rows: ICookieRow[] = await new Promise((resolve, reject) => {
     db.all(sql, (err, rows) => {
