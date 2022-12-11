@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.1.0 2022-12-11
+
+- feat: export ICookie & chromiumBrowsers
+- feat: use sql parameters
+
 ## v0.0.3 2022-12-11
 
 - add readme
