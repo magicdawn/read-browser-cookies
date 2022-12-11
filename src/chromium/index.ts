@@ -2,7 +2,7 @@
  * https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/cookies.py
  */
 
-import fse from 'fs-extra'
+import fs from 'fs'
 import globby from 'globby'
 import { omit } from 'lodash'
 import os from 'os'
@@ -58,7 +58,7 @@ export async function readChromium(
   }
 
   // check search_root
-  if (!fse.existsSync(searchRoot)) {
+  if (!fs.existsSync(searchRoot)) {
     debug('search %s root not exists', searchRoot)
     return
   }
@@ -93,7 +93,7 @@ function findMostRecentlyUsedFile(root: string, filename: string) {
     cwd: root,
     absolute: true,
   })
-  const withStat = files.map((f) => ({ filepath: f, stat: fse.statSync(f) }))
+  const withStat = files.map((f) => ({ filepath: f, stat: fs.statSync(f) }))
   const sorted = withStat.sort((a, b) => -(a.stat.mtimeMs - b.stat.mtimeMs)) // desc
   const first = sorted[0]?.filepath
   return first
