@@ -14,6 +14,11 @@
 $ pnpm add read-browser-cookies
 ```
 
+## Alternative
+
+- https://github.com/bertrandom/chrome-cookies-secure
+- https://github.com/phoqe/havelock
+
 ## Status
 
 - [x] macOS + Chromium Based browsers
