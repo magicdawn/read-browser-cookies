@@ -8,6 +8,10 @@ export function notImplemented() {
   throw new Error('not implemented')
 }
 
+export function noop() {
+  // empty placeholder
+}
+
 const defaultNotImplement = notImplemented
 
 export function defineCrossPlatform<M extends (...args: any[]) => any>(
@@ -31,6 +35,14 @@ export function defineCrossPlatform<M extends (...args: any[]) => any>(
   }
 }
 
-export function execCrossPlatform(options: Partial<Record<'mac' | 'win' | 'linux', () => void>>) {
+export function execCrossPlatform(
+  options: Partial<Record<'mac' | 'win' | 'linux', () => void>>,
+  useNoop = false
+) {
+  if (useNoop) {
+    options.mac ||= noop
+    options.win ||= noop
+    options.linux ||= noop
+  }
   defineCrossPlatform(options)()
 }

@@ -16,6 +16,8 @@ $ pnpm add read-browser-cookies
 
 ## Alternative
 
+I'm surprised yt-dlp's usage, and create this pkg, then I found these existing alternative pkgs
+
 - https://github.com/bertrandom/chrome-cookies-secure
 - https://github.com/phoqe/havelock
 

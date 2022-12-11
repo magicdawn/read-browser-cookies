@@ -1,5 +1,5 @@
 import sqlite3, { Database } from 'sqlite3'
-import { baseDebug } from './helper'
+import { baseDebug, execCrossPlatform } from './helper'
 
 const DEFAULT_SQL = `
 SELECT host_key as hostKey, name, value, encrypted_value as encryptedValue, path, expires_utc as expiresUtc, is_secure as isSecure
@@ -37,6 +37,18 @@ export async function query(dbpath: string, site?: string) {
     })
   })
 
+  rows.forEach((row) => {
+    postProcess(row)
+  })
+
   db.close()
   return rows
+}
+
+/**
+ * extra process for cookie
+ */
+
+function postProcess(cookie: ICookieRow) {
+  execCrossPlatform({}, true)
 }

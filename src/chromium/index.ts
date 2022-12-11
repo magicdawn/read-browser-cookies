@@ -77,7 +77,10 @@ export async function readChromium(
   const decryptedRows = allRows.map((row) => {
     const newrow: ICookie = {
       ...omit(row, ['encryptedValue']),
+      // decrypt
       value: decryptor.decrypt(row.encryptedValue) || row.value,
+      // expiresUtc = 0, means session cookie
+      expiresUtc: row.expiresUtc ? processChromeTimestamp(row.expiresUtc) : row.expiresUtc,
     }
     return newrow
   })
@@ -171,4 +174,15 @@ function getChromiumBasedBrowserSettings(browserName: IChromiumBasedBrowser) {
 
 function xdgConfigHome() {
   return process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
+}
+
+/**
+ * 17 位时间戳的处理
+ * https://stackoverflow.com/questions/20458406/what-is-the-format-of-chromes-timestamps
+ * 11644473600 = 1970-1-1 - 1601-1-1, 单位 (s)
+ */
+export function processChromeTimestamp(chromeTs: number) {
+  const unixInSeconds = chromeTs / 1000000 - 11644473600 // (s) len=10
+  const unixInMillSeconds = Number((unixInSeconds * 1000).toFixed(0)) // (ms) len=13
+  return unixInMillSeconds
 }
