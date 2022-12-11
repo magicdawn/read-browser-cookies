@@ -1,4 +1,4 @@
-import sqlite3, { Database, OPEN_READONLY } from 'sqlite3'
+import sqlite3, { Database } from 'sqlite3'
 import { baseDebug } from './helper'
 
 const DEFAULT_SQL = `
