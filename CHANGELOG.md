@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.1.1 2022-12-12
+
+- feat: process chrome special timestamp
+
 ## v0.1.0 2022-12-11
 
 - feat: export ICookie & chromiumBrowsers
