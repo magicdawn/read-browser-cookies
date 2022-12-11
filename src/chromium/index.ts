@@ -59,7 +59,7 @@ export async function readChromium(
 
   // check search_root
   if (!fs.existsSync(searchRoot)) {
-    debug('search %s root not exists', searchRoot)
+    debug('search root: %s not exists', searchRoot)
     return
   }
 
