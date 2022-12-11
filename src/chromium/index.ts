@@ -4,9 +4,10 @@
 
 import fse from 'fs-extra'
 import globby from 'globby'
+import { omit } from 'lodash'
 import os from 'os'
 import path from 'path'
-import { query } from '../db'
+import { ICookie, query } from '../db'
 import { ArrayItems, baseDebug, execCrossPlatform } from '../helper'
 import { ChromeCookieDecryptor } from './decrypt'
 
@@ -74,12 +75,10 @@ export async function readChromium(
   await decryptor.init()
 
   const decryptedRows = allRows.map((row) => {
-    const newrow: Omit<typeof row, 'encryptedValue'> = {
-      ...row,
+    const newrow: ICookie = {
+      ...omit(row, ['encryptedValue']),
       value: decryptor.decrypt(row.encryptedValue) || row.value,
     }
-    // @ts-ignore
-    delete newrow.encryptedValue
     return newrow
   })
   return decryptedRows

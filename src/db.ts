@@ -17,6 +17,8 @@ export type ICookieRow = {
   isSecure: number
 }
 
+export type ICookie = Omit<ICookieRow, 'encryptedValue'>
+
 export async function query(dbpath: string, site?: string) {
   const db = new Database(dbpath, sqlite3.OPEN_READONLY)
 
