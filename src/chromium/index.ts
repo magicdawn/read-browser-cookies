@@ -7,6 +7,7 @@ import globby from 'globby'
 import { omit } from 'lodash'
 import os from 'os'
 import path from 'path'
+import psl from 'psl'
 import { ICookie, query } from '../db'
 import { ArrayItems, baseDebug, execCrossPlatform } from '../helper'
 import { ChromeCookieDecryptor } from './decrypt'
@@ -39,6 +40,7 @@ export async function readChromium(
   const config = getChromiumBasedBrowserSettings(browserName)
 
   let searchRoot: string
+  // no profile
   if (!profile) {
     searchRoot = config.browserDir
   }
@@ -69,12 +71,21 @@ export async function readChromium(
     return
   }
 
-  const allRows = await query(cookieDatabasePath, site)
+  // site, use domain for query db
+  // e.g if site = space.bilibili.com, should include cookies under .bilibili.com
+  // postprocess after db query
+  let tlDomain: string | undefined
+  if (site) {
+    tlDomain = psl.get(site) || undefined
+    debug('site = %s, tlDomain = %s', site, tlDomain)
+  }
+
+  const allRows = await query(cookieDatabasePath, tlDomain)
 
   const decryptor = new ChromeCookieDecryptor(config.browserDir, config.keyringName, keyring)
   await decryptor.init()
 
-  const decryptedRows = allRows.map((row) => {
+  let decryptedRows = allRows.map((row) => {
     const newrow: ICookie = {
       ...omit(row, ['encryptedValue']),
       // decrypt
@@ -84,6 +95,24 @@ export async function readChromium(
     }
     return newrow
   })
+
+  if (site && tlDomain) {
+    const allowedHostKey: string[] = []
+    const parts = site.split('.')
+    let startIndex = 0
+    const cur = () => parts.slice(startIndex).join('.')
+
+    while (cur().length >= tlDomain.length) {
+      allowedHostKey.push('.' + cur())
+      startIndex++
+    }
+    debug('site = %s, allowedHostKey = %s', site, allowedHostKey)
+
+    decryptedRows = decryptedRows.filter((row) => {
+      return allowedHostKey.includes(row.hostKey)
+    })
+  }
+
   return decryptedRows
 }
 
@@ -182,7 +211,7 @@ function xdgConfigHome() {
  * 11644473600 = 1970-1-1 - 1601-1-1, 单位 (s)
  */
 export function processChromeTimestamp(chromeTs: number) {
-  const unixInSeconds = chromeTs / 1000000 - 11644473600 // (s) len=10
-  const unixInMillSeconds = Number((unixInSeconds * 1000).toFixed(0)) // (ms) len=13
-  return unixInMillSeconds
+  const unixTsInSeconds = chromeTs / 1000000 - 11644473600 // (s) len=10
+  const unixTsInMillSeconds = Number((unixTsInSeconds * 1000).toFixed(0)) // (ms) len=13
+  return unixTsInMillSeconds
 }

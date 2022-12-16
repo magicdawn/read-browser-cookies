@@ -6,14 +6,15 @@ type ISupportedBrowsers = IChromiumBasedBrowser | 'firefox' | 'safari'
 export { chromiumBasedBrowsers }
 export { ISupportedBrowsers, IChromiumBasedBrowser }
 
-export function readBrowserCookies(
+export async function readBrowserCookies(
   browser: ISupportedBrowsers = 'chrome',
-  options?: { site?: string; profile?: string; keyring_name?: string }
+  options?: { profile?: string; keyring?: string; site?: string }
 ) {
   if (chromiumBasedBrowsers.includes(browser as IChromiumBasedBrowser)) {
     browser = <IChromiumBasedBrowser>browser
-    return readChromium(browser, options)
+    return await readChromium(browser, options)
   }
 
-  notImplemented()
+  // notImplemented()
+  return undefined
 }
