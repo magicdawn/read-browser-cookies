@@ -1,12 +1,11 @@
 import { chromiumBasedBrowsers, IChromiumBasedBrowser, readChromium } from './chromium'
-import { notImplemented } from './helper'
 
 type ISupportedBrowsers = IChromiumBasedBrowser | 'firefox' | 'safari'
 
 export { chromiumBasedBrowsers }
 export { ISupportedBrowsers, IChromiumBasedBrowser }
 
-export async function readBrowserCookies(
+export async function readCookies(
   browser: ISupportedBrowsers = 'chrome',
   options?: { profile?: string; keyring?: string; site?: string }
 ) {
@@ -17,4 +16,19 @@ export async function readBrowserCookies(
 
   // notImplemented()
   return undefined
+}
+
+/**
+ * return a value for `Cookies: value`
+ */
+export async function readCookiesStr(
+  browser: ISupportedBrowsers = 'chrome',
+  options?: { profile?: string; keyring?: string; site?: string }
+) {
+  const cookies = await readCookies(browser, options)
+  const str = (cookies || [])
+    .filter((item) => item.expiresUtc && item.expiresUtc > Date.now())
+    .map((c) => `${c.name}=${c.value}`)
+    .join(';')
+  return str
 }

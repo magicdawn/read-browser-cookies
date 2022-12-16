@@ -1,14 +1,16 @@
 import debugFactory from 'debug'
-import { readBrowserCookies } from '../src'
+import { readCookies, readCookiesStr } from '../src'
 
 debugFactory.enable('read-browser-cookies:*')
 
 void (async () => {
-  const cookies = (await readBrowserCookies('chrome', { site: 't.bilibili.com' })) || []
-  console.log(cookies)
-  for (const c of cookies || []) {
-    if (c.expiresUtc) {
-      console.log(new Date(c.expiresUtc))
-    }
+  {
+    const cookies = (await readCookies('chrome', { site: 't.bilibili.com' })) || []
+    // console.log(cookies)
+  }
+
+  {
+    const cookies = await readCookiesStr('chrome', { site: 't.bilibili.com' })
+    console.log(cookies)
   }
 })().catch(console.error)
