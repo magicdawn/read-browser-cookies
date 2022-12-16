@@ -12,7 +12,8 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "incremental": true,
-    "declaration": true
+    "declaration": true,
+    "types": ["should", "mocha"]
   },
   "ts-node": {
     "swc": true

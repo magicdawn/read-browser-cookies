@@ -4,7 +4,7 @@ import { readBrowserCookies } from '../src'
 debugFactory.enable('read-browser-cookies:*')
 
 void (async () => {
-  const cookies = (await readBrowserCookies('chrome', { site: 'space.bilibili.com' })) || []
+  const cookies = (await readBrowserCookies('chrome', { site: 't.bilibili.com' })) || []
   console.log(cookies)
   for (const c of cookies || []) {
     if (c.expiresUtc) {
