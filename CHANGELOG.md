@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.2.0 2022-12-16
+
+- feat: add `readCookies` / `readCookiesStr` export
+
 ## v0.1.1 2022-12-12
 
 - feat: process chrome special timestamp
