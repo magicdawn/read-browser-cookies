@@ -2,7 +2,7 @@
 
 > Node.js version of `--cookies-from-browser` from yt-dlp
 
-[![Build Status](https://img.shields.io/github/workflow/status/magicdawn/read-browser-cookies/ci/main.svg?style=flat-square)](https://github.com/magicdawn/read-browser-cookies/actions/workflows/ci.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/magicdawn/read-browser-cookies/ci.yml?branch=main&style=flat-square)](https://github.com/magicdawn/read-browser-cookies/actions/workflows/ci.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/magicdawn/read-browser-cookies.svg?style=flat-square)](https://codecov.io/gh/magicdawn/read-browser-cookies)
 [![npm version](https://img.shields.io/npm/v/read-browser-cookies.svg?style=flat-square)](https://www.npmjs.com/package/read-browser-cookies)
 [![npm downloads](https://img.shields.io/npm/dm/read-browser-cookies.svg?style=flat-square)](https://www.npmjs.com/package/read-browser-cookies)
