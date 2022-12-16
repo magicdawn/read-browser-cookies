@@ -45,17 +45,21 @@ current only macOS + Chromium based browsers are supported.
 ## API
 
 ```js
-import { readBrowserCookies } from 'read-browser-cookies'
+import { readCookies, readCookiesStr } from 'read-browser-cookies'
 
 // read all cookies
-readBrowserCookies('chrome').then((cookiesArray) => {
+readCookies('chrome').then((cookiesArray) => {
   //
 })
 
 // read all cookies for specific site
-// using sqlite `like %site%`
-readBrowserCookies('chrome', { site: 'youtube.com' }).then((cookiesArray) => {
+readCookies('chrome', { site: 'youtube.com' }).then((cookiesArray) => {
   //
+})
+
+// read all cookies for specific site, as string
+readCookiesStr('chrome', { site: 'youtube.com' }).then((cookiesStr) => {
+  // request.get(url, { headers: { cookie: cookiesStr } })
 })
 ```
 
