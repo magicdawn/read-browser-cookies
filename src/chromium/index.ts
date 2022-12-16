@@ -212,6 +212,6 @@ function xdgConfigHome() {
  */
 export function processChromeTimestamp(chromeTs: number) {
   const unixTsInSeconds = chromeTs / 1000000 - 11644473600 // (s) len=10
-  const unixTsInMillSeconds = Number((unixTsInSeconds * 1000).toFixed(0)) // (ms) len=13
+  const unixTsInMillSeconds = Math.round(unixTsInSeconds * 1000) // (ms) len=13
   return unixTsInMillSeconds
 }
