@@ -33,27 +33,27 @@
   },
   "homepage": "https://github.com/magicdawn/read-browser-cookies#readme",
   "devDependencies": {
-    "@magicdawn/prettier-config": "^0.0.2",
-    "@swc/core": "^1.3.23",
-    "@types/debug": "^4.1.7",
-    "@types/lodash": "^4.14.191",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.15",
-    "@types/psl": "^1.1.0",
+    "@magicdawn/prettier-config": "^0.0.3",
+    "@swc/core": "^1.4.8",
+    "@types/debug": "^4.1.12",
+    "@types/lodash": "^4.17.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.30",
+    "@types/psl": "^1.1.3",
     "@types/should": "^13.0.0",
-    "@types/tough-cookie": "^4.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "eslint": "^8.29.0",
-    "eslint-config-prettier": "^8.5.0",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.1.0",
-    "mocha": "^10.2.0",
+    "@types/tough-cookie": "^4.0.5",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "mocha": "^10.3.0",
     "nyc": "^15.1.0",
-    "prettier": "^2.8.1",
+    "prettier": "^3.2.5",
     "should": "^13.2.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
   },
   "packageManager": "pnpm@7.17.0",
   "publishConfig": {
@@ -71,6 +71,6 @@
     "keytar": "^7.9.0",
     "lodash": "^4.17.21",
     "psl": "^1.9.0",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.7"
   }
 }
