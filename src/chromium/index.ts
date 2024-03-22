@@ -2,8 +2,8 @@
  * https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/cookies.py
  */
 
+import fg from 'fast-glob'
 import fs from 'fs'
-import globby from 'globby'
 import { omit } from 'lodash'
 import os from 'os'
 import path from 'path'
@@ -35,7 +35,7 @@ export type IChromiumBasedBrowser = ArrayItems<typeof chromiumBasedBrowsers>
 // or ('firefox', 'default', None, 'Meta')
 export async function readChromium(
   browserName: IChromiumBasedBrowser,
-  { profile, keyring, site }: { profile?: string; keyring?: string; site?: string } = {}
+  { profile, keyring, site }: { profile?: string; keyring?: string; site?: string } = {},
 ) {
   const config = getChromiumBasedBrowserSettings(browserName)
 
@@ -121,7 +121,7 @@ function isPath(value: string) {
 }
 
 function findMostRecentlyUsedFile(root: string, filename: string) {
-  const files = globby.sync(`./**/${filename}`, {
+  const files = fg.sync(`./**/${filename}`, {
     cwd: root,
     absolute: true,
   })

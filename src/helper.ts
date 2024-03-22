@@ -15,7 +15,7 @@ export function noop() {
 const defaultNotImplement = notImplemented
 
 export function defineCrossPlatform<M extends (...args: any[]) => any>(
-  options: Partial<Record<'mac' | 'win' | 'linux', M>>
+  options: Partial<Record<'mac' | 'win' | 'linux', M>>,
 ): M {
   const notImplemented = defaultNotImplement as M
 
@@ -37,7 +37,7 @@ export function defineCrossPlatform<M extends (...args: any[]) => any>(
 
 export function execCrossPlatform(
   options: Partial<Record<'mac' | 'win' | 'linux', () => void>>,
-  useNoop = false
+  useNoop = false,
 ) {
   if (useNoop) {
     options.mac ||= noop
@@ -46,3 +46,7 @@ export function execCrossPlatform(
   }
   defineCrossPlatform(options)()
 }
+
+// https://github.com/TypeStrong/ts-node/discussions/1290
+// https://github.com/microsoft/TypeScript/issues/43329
+export const dynamicImport = new Function('specifier', 'return import(specifier)')

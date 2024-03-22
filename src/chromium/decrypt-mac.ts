@@ -1,11 +1,12 @@
 import crypto from 'crypto'
-import execa from 'execa'
 import keytar from 'keytar'
+import { dynamicImport } from '../helper'
 
-export function getPasswordByExternalProcess(keyringName: string) {
-  const { stdout: password } = execa.commandSync(
+export async function getPasswordByExternalProcess(keyringName: string) {
+  const { execaCommand } = (await dynamicImport('execa')) as typeof import('execa')
+  const { stdout: password } = await execaCommand(
     `security find-generic-password -w -a '${keyringName}' -s '${keyringName} Safe Storage'`,
-    { shell: true }
+    { shell: true },
   )
   return password
 }

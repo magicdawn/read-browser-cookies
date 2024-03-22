@@ -33,7 +33,7 @@ export async function query(dbpath: string, site?: string) {
   const rows: ICookieRow[] = await new Promise((resolve, reject) => {
     db.all(sql, params, (err, rows) => {
       if (err) return reject(err)
-      resolve(rows)
+      resolve(rows as ICookieRow[])
     })
   })
 
